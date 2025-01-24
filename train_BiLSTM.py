@@ -160,6 +160,7 @@ class Tester(object):
 
 
 def load_tensor(file_name, dtype):
+    print(file_name)
     return [dtype(d).to(device) for d in np.load(file_name + '.npy' ,allow_pickle=True) ]
 
 
@@ -203,7 +204,7 @@ if __name__ == "__main__":
     """Load preprocessed data."""
 #    dir_input = ('../dataset/' + DATASET + '/input/'
 #                 'radius' + str(radius) + '_ngram' + str(ngram) + '/')
-    dir_input = ('../dataset/' + DATASET + '/input/for_train13/')
+    dir_input = ('dataset/' + DATASET + '/train_dataset/')
     compounds = load_tensor(dir_input + 'compounds', torch.LongTensor)
     adjacencies = load_tensor(dir_input + 'adjacencies', torch.FloatTensor)
     proteins = load_tensor(dir_input + 'proteins', torch.LongTensor)
@@ -226,11 +227,11 @@ if __name__ == "__main__":
     tester = Tester(model)
 
     """Output files."""
-    file_AUCs = '../new_model_output/3/AUCs--' + setting + '.txt'
-    file_model = '../new_model_output/3/' + setting
+    file_AUCs = 'new_model_output/3/AUCs--' + setting + '.txt'
+    file_model = 'new_model_output/3/' + setting
     AUCs = ('Epoch\tTime(sec)\tLoss_train\tAUC_dev\t'
             'AUC_test\tPrecision_test\tRecall_test')
-    with open(file_AUCs, 'w') as f:
+    with open(file_AUCs, 'w+') as f:
         f.write(AUCs + '\n')
 
     """Start training."""

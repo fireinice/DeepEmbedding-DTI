@@ -84,6 +84,17 @@ def dump_dictionary(dictionary, filename):
         pickle.dump(dict(dictionary), f)
 
 
+def padding_array(l):
+    def resize(row, length):
+        row_a = np.array(row)
+        row_a.resize(length)
+        return row_a
+    row_length = max(l, key=len).__len__()
+    aligned = np.array([ resize(row, row_length) for row in l])
+    np.set_printoptions(threshold=sys.maxsize)
+    # print(aligned)
+    return aligned
+
 if __name__ == "__main__":
 
     DATASET, radius, ngram = ['dude', 2, 3]
@@ -108,7 +119,8 @@ if __name__ == "__main__":
 #            N_index.append(MM)
 #        data_train_list=[]
 
-    with open('D:/SERT/SERT_01_data.txt', 'r') as f:
+    # with open('dataset/dude/test.txt', 'r') as f:
+    with open('dataset/dude/all_data.txt', 'r') as f:
         data_list = f.read().strip().split('\n')
     """Exclude data contains '.' in the SMILES format."""
     data_list = [d for d in data_list if '.' not in d.strip().split()[0]]
@@ -164,11 +176,15 @@ if __name__ == "__main__":
 
 #    dir_input = ('../dataset/' + DATASET + '/input/'
 #                 'radius' + str(radius) + '_ngram' + str(ngram) + '/')
-    dir_input=('D:/SERT/SERT_dataset/')
+    dir_input=('dataset/' + DATASET + '/train_dataset/')
     os.makedirs(dir_input, exist_ok=True)
 
     with open(dir_input + 'Smiles.txt', 'w') as f:
         f.write(Smiles)
+    
+    compounds = padding_array(compounds)
+    adjacencies = padding_array(adjacencies)
+    proteins = padding_array(proteins)
     np.save(dir_input + 'compounds', compounds)
     np.save(dir_input + 'adjacencies', adjacencies)
     np.save(dir_input + 'proteins', proteins)
